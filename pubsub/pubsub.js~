@@ -35,7 +35,10 @@ PubSub.prototype.unsubscribe = function(eventName, handler) {
         return handler;
     }
 
-    this.handlersList[eventName].splice( this.handlersList[eventName].indexOf(handler), 1);
+    var t = this.handlersList[eventName].indexOf(handler);
+    alert(t);
+
+    this.handlersList[eventName].splice( t, 1);
 
     return handler;
 };
@@ -75,18 +78,26 @@ PubSub.prototype.off = function(eventName) {
 
 var pubSub = new PubSub();
 
+
 function a() {alert("aaa!");}
-function c() {alert("ccc!");}
-function b() {alert("bbb!");}
 
 pubSub.subscribe('a', a);
-pubSub.subscribe('a', b);
-pubSub.subscribe('a', c);
 
-pubSub.publish('a');
+
+pubSub.subscribe('a',function(){
+    alert("ccc!");
+})
+
+pubSub.subscribe('a',function(){
+    alert("bbb!");
+})
+
+
+//pubSub.publish('a');
+//pubSub.off('a');
+
 pubSub.unsubscribe('a', a);
-pubSub.publish('a');
-pubSub.off('a');
+
 pubSub.publish('a');
 
 /**
