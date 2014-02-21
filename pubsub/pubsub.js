@@ -84,58 +84,39 @@ PubSub.prototype.off = function(eventName) {
     return true;
 };
 
+Function.prototype.subscribe = function(eventName) {
+	var pubSub = new PubSub();
+	pubSub.subscribe(eventName, this);
 
-var pubSub = new PubSub();
+	Function.prototype.subscribe = function(eventName) {
+   	pubSub.subscribe(eventName, this);
+	} 
 
-function a() {console.log("111!");}
-function b() {console.log("222!");}
-function c() {
-    var d = 9;
-    for (var i = 0; i < 1000000000; i++ )
-    {d++;}
-    console.log ("done");
+	PubSub.publish = function(eventName) {
+   	pubSub.publish(eventName, this);
+  	}
+
+	Function.prototype.unsubscribe = function(eventName) {
+	pubSub.unsubscribe(eventName, this);
+	}
+
+	PubSub.off = function(eventName) {
+   	pubSub.off(eventName, this);
+  	}
 }
-function d() {console.log("333!");}
-function f() {console.log("444!");}
-function g() {console.log("555!");}
-function h() {console.log("666!");}
-function j() {console.log("777!");}
-function k() {console.log("888!");}
-function l() {console.log("999!");}
-function q() {console.log("qqq!");}
-function w() {console.log("qqq!");}
 
-pubSub.subscribe('a', a);
-pubSub.subscribe('a', b);
-pubSub.subscribe('a', c);
-pubSub.subscribe('a', d);
-pubSub.subscribe('a', f);
-pubSub.subscribe('a', g);
-pubSub.subscribe('a', h);
-pubSub.subscribe('a', j);
-pubSub.subscribe('a', k);
-pubSub.subscribe('a', l);
-pubSub.subscribe('a', q);
-pubSub.subscribe('a', w);
+function foo(){alert("aaa")};
 
-pubSub.publish('a');
-//console.log("faza 2");
+foo.subscribe('click');
 
-pubSub.unsubscribe('a', a);
-pubSub.publish('a');
-pubSub.off('a');
-pubSub.publish('a');
+PubSub.publish('click');
 
-/**
- * @example
- *
- * PubSub.subscribe('click', function(event, data) { console.log(data) });
- * var second = PubSub.subscribe('click', function(event, data) { console.log(data) });
- *
- * //Отписать одну функцию от события 'click':
- * PubSub.unsubscribe('click', second);
- *
- * //Отписать группу функций от события 'click'
- * PubSub.off('click');
- */
+foo.unsubscribe('click');
 
+PubSub.publish('click');
+
+foo.subscribe('click');
+
+PubSub.off('click');
+
+PubSub.publish('click');
