@@ -84,39 +84,33 @@ PubSub.prototype.off = function(eventName) {
     return true;
 };
 
-Function.prototype.subscribe = function(eventName) {
-	var pubSub = new PubSub();
-	pubSub.subscribe(eventName, this);
+var myEventChannel = (function() {
+    var pubSub = new PubSub();
+    Function.prototype.subscribe = function(eventName) {
+        pubSub.subscribe(eventName, this);
+    }
 
-	Function.prototype.subscribe = function(eventName) {
-   	pubSub.subscribe(eventName, this);
-	} 
+    Function.prototype.unsubscribe = function(eventName) {
+        pubSub.unsubscribe(eventName, this);
+    }
+    return pubSub;
+})();
 
-	PubSub.publish = function(eventName) {
-   	pubSub.publish(eventName, this);
-  	}
 
-	Function.prototype.unsubscribe = function(eventName) {
-	pubSub.unsubscribe(eventName, this);
-	}
-
-	PubSub.off = function(eventName) {
-   	pubSub.off(eventName, this);
-  	}
-}
-
-function foo(){alert("aaa")};
+function foo(){alert("aaa");};
+function foo1(){alert("111");};
 
 foo.subscribe('click');
+foo1.subscribe('click');
 
-PubSub.publish('click');
+myEventChannel.publish('click');
 
 foo.unsubscribe('click');
 
-PubSub.publish('click');
+myEventChannel.publish('click');
 
 foo.subscribe('click');
 
-PubSub.off('click');
+myEventChannel.off('click');
 
-PubSub.publish('click');
+myEventChannel.publish('click');
